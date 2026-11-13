@@ -4,6 +4,10 @@ Plataforma **HTML5/CSS/JavaScript**, offline e sem dependências, para estudar *
 
 _Capturas de tela poderão ser adicionadas posteriormente._
 
+## Demonstrações visuais
+
+As 48 etapas teóricas têm um percurso visual com quatro quadros: situação inicial, investigação, transformação e demonstração. É possível avançar/retroceder, desmontar e reconstruir arestas e observar métricas de vértices, arestas, componentes e grau; os quadros são esquemáticos, e alterações manuais são experimentos independentes da prova formal. O estado visual é salvo no progresso local.
+
 ## Funcionalidades
 
 - 12 trilhas: planaridade, conjuntos independentes e cobertura, coloração, Euler/Hamilton, grafos de linha, árvores/AGM, caminhos mínimos, bipartidos e graus, matchings, sequências gráficas, modelagem por conflitos e fluxo.
