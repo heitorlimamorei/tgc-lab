@@ -7,7 +7,7 @@ function visualGetData(id,step){return TGC_VISUAL_STORIES[id]?.[step]||null}
 function visualEdgeKey(e){return e.a+"-"+e.b}
 function visualDrawGraph(board,vid,key,phase){
  const g=TGC_VISUAL_GRAPHS[board.graph];if(!g)return '';
- const build=progress.visualBuild?.[key+":"+phase]||null;
+ const build=progress.visualBuild?.[key+":"+phase+":"+board.graph]||null;
  const shown=g.edges.filter((e)=>build===null||build.includes(visualEdgeKey(e)));
  const highlight=new Set([...(g.focusEdges||[]),...((board.focus&&Array.isArray(board.focus))?board.focus:[])]);
  const ncolors=['','var(--blue)','var(--orange)','var(--accent)','var(--yellow)','var(--red)'];
@@ -20,14 +20,14 @@ function visualDrawGraph(board,vid,key,phase){
   const from=[a[0]+ux*17,a[1]+uy*17],to=[b[0]-ux*20,b[1]-uy*20];
   const focus=highlight.has(id)||highlight.has(e.b+"-"+e.a);
   const arrow=g.directed?' marker-end="url(#'+vid+'-arrow)"':'';
-  const onClick='data-v-action="edge" data-v-edge="'+visEsc(id)+'" data-v-key="'+visEsc(key)+'" data-v-phase="'+phase+'"';
+  const onClick='data-v-action="edge" data-v-edge="'+visEsc(id)+'" data-v-key="'+visEsc(key)+'" data-v-phase="'+phase+'" data-v-board="'+visEsc(board.graph)+'"';
   const sw=focus?4:2.25,stroke=focus?'var(--accent)':'var(--muted)';
   paths+='<g role="button" tabindex="0" aria-label="Alternar aresta '+visEsc(e.a)+'–'+visEsc(e.b)+'" '+onClick+'><path d="M'+from.join(',')+' L'+to.join(',')+'" fill="none" stroke="'+stroke+'" stroke-width="'+sw+'" stroke-dasharray="'+(active?'none':'5 7')+'" opacity="'+(active?'0.9':'0.25')+'"'+arrow+'/><path d="M'+a.join(',')+' L'+b.join(',')+'" stroke="transparent" stroke-width="19" fill="none"/>';
   if(e.w!==null){const px=(a[0]+b[0])/2-uy*15,py=(a[1]+b[1])/2+ux*15;paths+='<text x="'+px+'" y="'+py+'" class="visual-weight">'+visEsc(e.w)+'</text>'}
   paths+='</g>';
  });
  const nodes=nids.map((id)=>{const [x,y]=g.nodes[id],sel=window.TGC_VISUAL_PICK===key+":"+phase+":"+id;
- return '<g data-v-action="node" data-v-node="'+visEsc(id)+'" data-v-key="'+visEsc(key)+'" data-v-phase="'+phase+'" role="button" tabindex="0" aria-label="Selecionar vértice '+visEsc(id)+'"><circle cx="'+x+'" cy="'+y+'" r="17" fill="'+(ncolors[colors[id]||0]||'var(--panel3)')+'" stroke="'+(sel?'var(--yellow)':'var(--blue)')+'" stroke-width="'+(sel?4:2)+'"/><text x="'+x+'" y="'+(y+4.3)+'" class="visual-node-label">'+visEsc(id)+'</text></g>'}).join('');
+ return '<g data-v-action="node" data-v-node="'+visEsc(id)+'" data-v-key="'+visEsc(key)+'" data-v-phase="'+phase+'" data-v-board="'+visEsc(board.graph)+'" role="button" tabindex="0" aria-label="Selecionar vértice '+visEsc(id)+'"><circle cx="'+x+'" cy="'+y+'" r="17" fill="'+(ncolors[colors[id]||0]||'var(--panel3)')+'" stroke="'+(sel?'var(--yellow)':'var(--blue)')+'" stroke-width="'+(sel?4:2)+'"/><text x="'+x+'" y="'+(y+4.3)+'" class="visual-node-label" style="fill:'+(colors[id]?'var(--bg)':'var(--text)')+'">'+visEsc(id)+'</text></g>'}).join('');
  const count=shown.length,comps=(()=>{const adj=Object.fromEntries(nids.map(id=>[id,[]]));for(const e of shown){adj[e.a].push(e.b);adj[e.b].push(e.a)}const visited=new Set;let c=0;for(const id of nids){if(visited.has(id))continue;c++;const stack=[id];visited.add(id);while(stack.length){for(const n of adj[stack.pop()])if(!visited.has(n)){visited.add(n);stack.push(n)}}}return c})();
  const selected=(window.TGC_VISUAL_PICK||'').startsWith(key+":"+phase+":")?(window.TGC_VISUAL_PICK.split(":").at(-1)):null;
  const degree=selected?shown.reduce((acc,e)=>acc+(e.a===selected||e.b===selected?1:0),0):null;
@@ -42,7 +42,7 @@ function visualLesson(id,step){
  const f=story.frames[phase],build=progress.visualBuild?.[key+":"+phase]||null;
  const controls='<div class="visual-controls"><button class="btn ghost" data-v-action="prev" data-v-key="'+visEsc(key)+'" '+(phase===0?'disabled':'')+'>← Desmontar etapa</button><button class="btn secondary" data-v-action="next" data-v-key="'+visEsc(key)+'" '+(phase===3?'disabled':'')+'>Montar próxima →</button><button class="btn ghost" data-v-action="restart" data-v-key="'+visEsc(key)+'">↺ Reiniciar</button></div>';
  const buildInfo=build!==null?'<p class="visual-build-info">Modo construção: arestas tracejadas estão ausentes. Clique nelas para adicioná-las. Os valores abaixo são recalculados para o seu desenho.</p>':'<p class="visual-build-info">Clique em um vértice para examinar seu grau ou em “Montagem livre” para retirar e recolocar arestas.</p>';
- return '<section class="visual-card" aria-label="Demonstração interativa"><div class="visual-topline"><span class="visual-kicker">DEMONSTRAÇÃO INTERATIVA · ETAPA '+(step+1)+'</span><span class="visual-step-counter">'+(phase+1)+'/4</span></div><h3>'+visEsc(story.title)+'</h3><div class="visual-step-track">'+[0,1,2,3].map(i=>'<button aria-label="Ir para quadro '+(i+1)+'" data-v-action="goto" data-v-key="'+visEsc(key)+'" data-v-step="'+i+'" class="visual-dot '+(i===phase?'active':'')+'"></button>').join('')+'</div><p class="visual-frame-label">'+visEsc(f.label)+'</p><p class="visual-explainer">'+visEsc(f.note)+'</p><div class="visual-boards">'+f.boards.map((b,i)=>visualDrawGraph(b,'vis-'+id+'-'+step+'-'+phase+'-'+i,key,phase)).join('')+'</div>'+buildInfo+'<div class="visual-extra"><button class="btn ghost" data-v-action="build" data-v-key="'+visEsc(key)+'" data-v-phase="'+phase+'">'+(build===null?'◫ Montagem livre':'Restaurar grafo original')+'</button><span>Figuras esquemáticas e interativas; as operações formais são explicadas no texto.</span></div>'+controls+'</section>';
+ return '<section class="visual-card" aria-label="Demonstração interativa"><div class="visual-topline"><span class="visual-kicker">DEMONSTRAÇÃO INTERATIVA · ETAPA '+(step+1)+'</span><span class="visual-step-counter">'+(phase+1)+'/4</span></div><h3>'+visEsc(story.title)+'</h3><div class="visual-step-track">'+[0,1,2,3].map(i=>'<button aria-label="Ir para quadro '+(i+1)+'" data-v-action="goto" data-v-key="'+visEsc(key)+'" data-v-step="'+i+'" class="visual-dot '+(i===phase?'active':'')+'"></button>').join('')+'</div><p class="visual-frame-label">'+visEsc(f.label)+'</p><p class="visual-explainer">'+visEsc(f.note)+'</p><div class="visual-boards">'+f.boards.map((b,i)=>visualDrawGraph(b,'vis-'+id+'-'+step+'-'+phase+'-'+i,key,phase)).join('')+'</div>'+buildInfo+'<div class="visual-extra"><button class="btn ghost" data-v-action="build" data-v-key="'+visEsc(key)+'" data-v-phase="'+phase+'" data-v-board="'+visEsc(f.boards[0].graph)+'">'+(build===null?'◫ Montagem livre':'Restaurar grafo original')+'</button><span>Figuras esquemáticas e interativas; as operações formais são explicadas no texto.</span></div>'+controls+'</section>';
 }
 function visualHandleAction(target){
  const act=target.dataset.vAction;
@@ -55,12 +55,12 @@ function visualHandleAction(target){
  if(act==='prev'||act==='next'||act==='restart'||act==='goto'){
   progress.visualSteps[key]=act==='prev'?Math.max(0,(progress.visualSteps[key]||0)-1):act==='next'?Math.min(3,(progress.visualSteps[key]||0)+1):act==='restart'?0:Math.max(0,Math.min(3,Number(target.dataset.vStep)));
  }else if(act==='build'){
-  const slot=key+":"+phase;
+  const slot=key+":"+phase+":"+target.dataset.vBoard;
   if(Object.hasOwn(progress.visualBuild,slot))delete progress.visualBuild[slot];
   else progress.visualBuild[slot]=[];
  }else if(act==='edge'){
-  const slot=key+":"+phase;
-  if(!Object.hasOwn(progress.visualBuild,slot)){progress.visualBuild[slot]=TGC_VISUAL_GRAPHS[visualGetData(ui.moduleId,ui.step).frames[phase].boards[0].graph].edges.map(visualEdgeKey)}
+  const slot=key+":"+phase+":"+target.dataset.vBoard;
+  if(!Object.hasOwn(progress.visualBuild,slot)){progress.visualBuild[slot]=TGC_VISUAL_GRAPHS[target.dataset.vBoard].edges.map(visualEdgeKey)}
   const arr=progress.visualBuild[slot];const id=target.dataset.vEdge;
   progress.visualBuild[slot]=arr.includes(id)?arr.filter(x=>x!==id):[...arr,id];
  }else if(act==='node'){
