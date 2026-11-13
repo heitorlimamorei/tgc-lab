@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="TGC Lab: plataforma offline de estudos de Teoria dos Grafos, com diagnóstico, trilhas, questões e revisão espaçada.">
+  <title>TGC Lab · Missões de Grafos</title>
+  <link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand" role="button" tabindex="0" data-go="dashboard">
+        <div class="brand-mark">⌁</div>
+        <div><strong>TGC<span> LAB</span></strong><small>Missões de Grafos</small></div>
+      </div>
+      <div class="sidebar-section"><div class="sidebar-label">EXPLORAR</div>
+        <nav class="nav-main" id="nav-main" aria-label="Menu principal"></nav>
+      </div>
+      <div class="sidebar-section topics-section"><div class="sidebar-label">TRILHAS <span id="nav-count">12</span></div><nav class="nav-topics" id="nav-topics" aria-label="Trilhas"></nav></div>
+      <div class="sidebar-bottom"><div class="aside-stat"><span>Seu progresso</span><strong id="aside-progress">0%</strong></div><div class="thin-progress"><span id="aside-progress-bar"></span></div><p>Seus dados ficam neste navegador. Exporte para fazer backup.</p></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <button id="mobile-menu" class="icon-btn mobile-menu" aria-label="Abrir menu">☰</button>
+        <div class="crumb" id="crumb">Visão geral / <strong>Dashboard</strong></div>
+        <div class="top-actions"><span class="date-chip" id="today-label"></span><button class="small-btn" id="theme-btn" title="Alternar tema" aria-label="Alternar tema">☼</button><div class="xp-chip">✦ <strong id="top-xp">0</strong> XP</div></div>
+      </header>
+      <main id="app" tabindex="-1" aria-live="polite"></main>
+      <footer class="footer">TGC LAB · Preparação P3 • Conteúdo baseado nos slides fornecidos e provas 2025/1 e 2026/1. Questões de treino autorais; marcações das provas não são gabarito oficial.</footer>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="import-input" accept="application/json" hidden>
+<script defer src="content.js"></script>
+<script defer src="app.js"></script>
+</body>
+</html>
