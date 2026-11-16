@@ -60,3 +60,19 @@ screenshots/           Capturas de tela (opcional)
 ## Notas
 
 Projeto para estudo pessoal. Não há uma licença de software adicionada automaticamente; o titular pode decidir as condições de redistribuição posteriormente.
+
+## Nova didática — aulas aprofundadas (48 etapas)
+
+Cada etapa agora apresenta **objetivo → intuição → quatro passos explicados → demonstração matemática → armadilha → pergunta de transferência**. O estudante tenta a pergunta antes de revelar a resolução, registra seu raciocínio e indica se conseguiu justificar a resposta ou se precisa rever. Os pontos de retorno aparecem no dashboard. Essa autoavaliação é separada do domínio medido por questões objetivas.
+
+As explicações são originais, baseadas nos tópicos dos slides do professor. Extensões matemáticas e ressalvas são identificadas como complementos; os PDFs do professor não são redistribuídos.
+
+### Pesquisa pedagógica e referências complementares
+
+- [MIT Teaching + Learning Lab — Worked Examples](https://tll.mit.edu/teaching-resources/how-people-learn/worked-examples/): exemplos resolvidos e explicação de cada passo.
+- [Oscar Levin — Discrete Mathematics: An Open Introduction, 4ª edição](https://discrete.openmathbooks.org/dmoi4.html): atividades investigativas, provas e exercícios com respostas ocultas.
+- [Carnegie Mellon Eberly Center — Active Learning](https://www.cmu.edu/teaching/online/designteach/strategies/activelearning.html): explicação de exemplos e autoavaliação.
+- [VisuAlgo — Minimum Spanning Tree](https://visualgo.net/en/mst): controles para avançar, retroceder, pausar e explorar algoritmos.
+- [MIT OpenCourseWare — Graph Theory and Coloring](https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/resources/lecture-6-graph-theory-and-coloring/): grafos, coloração e modelagem.
+
+O TGC Lab implementa explicações e diagramas próprios, sem reproduzir passagens ou imagens dos sites citados.
